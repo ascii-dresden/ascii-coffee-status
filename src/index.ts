@@ -65,6 +65,10 @@ app.get("/body", (request, response) => {
   });
 });
 
+app.get("/log", (req, res) => {
+  res.sendFile("logs/data.log");
+});
+
 app.listen(3000, () => {
   console.log("The application is listening on port 3000!");
 });
