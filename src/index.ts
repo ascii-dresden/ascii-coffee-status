@@ -23,15 +23,15 @@ app.post("/status", (req, res) => {
   res.send("ok");
 });
 
-app.get("/status", (req, res) => {
+app.get("/status", (_, res) => {
   res.send(classify());
 });
 
-app.get("/", (request, response) => {
+app.get("/", (_, res) => {
   let status = classify();
   let current = currentStatus[currentStatus.length - 1];
 
-  response.render("index", {
+  res.render("index", {
     status: status,
     current: {
       Time: current?.StatusSNS?.Time ?? null,
@@ -46,11 +46,11 @@ app.get("/", (request, response) => {
   });
 });
 
-app.get("/body", (request, response) => {
+app.get("/body", (_, res) => {
   let status = classify();
   let current = currentStatus[currentStatus.length - 1];
 
-  response.render("body", {
+  res.render("body", {
     status: status,
     current: {
       Time: current?.StatusSNS?.Time ?? null,
@@ -65,7 +65,7 @@ app.get("/body", (request, response) => {
   });
 });
 
-app.get("/log", (req, res) => {
+app.get("/log", (_, res) => {
   res.sendFile("/usr/src/app/logs/data.log");
 });
 
@@ -73,7 +73,7 @@ app.listen(3000, () => {
   console.log("The application is listening on port 3000!");
 });
 
-function classify() {
+function classify(): boolean {
   let sum = 0;
   let count = 0;
 
@@ -88,6 +88,6 @@ function classify() {
   return sum / count >= 18 ? true : false;
 }
 
-function isNumber(n) {
+function isNumber(n: any): boolean {
   return typeof n == "number" && !isNaN(n - n);
 }
