@@ -66,7 +66,7 @@ app.get("/body", (request, response) => {
 });
 
 app.get("/log", (req, res) => {
-  res.sendFile("logs/data.log");
+  res.sendFile("/usr/src/app/logs/data.log");
 });
 
 app.listen(3000, () => {
