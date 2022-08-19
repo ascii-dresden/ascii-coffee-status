@@ -1,0 +1,11 @@
+version: "3"
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: docker/build.Dockerfile
+    container_name: "ascii-coffee-status"
+    volumes:
+      - ./logs:/usr/src/app/logs
+    ports:
+      - "3000:3000"

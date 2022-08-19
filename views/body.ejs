@@ -1,0 +1,21 @@
+<div class="body <%= status %>">
+    <div class="container">
+        <div class="status-icon"><% if (status) { %>😄<% } else { %>😕<% } %></div>
+        <div class="status-text"><% if (status) { %>
+            Yay, die Machine ist an!
+        <% } else { %>
+            Ohh, die Machine ist aus!
+        <% } %></div>
+        <div class="current-table">
+            <table>
+                <tr><td>Time</td><td><%= current.Time %></td></tr>
+                <tr><td>Total</td><td><%= current.Total %></td></tr>
+                <tr><td>Power</td><td><%= current.Power %></td></tr>
+                <tr><td>ApparentPower</td><td><%= current.ApparentPower %></td></tr>
+                <tr><td>ReactivePower</td><td><%= current.ReactivePower %></td></tr>
+                <tr><td>Factor</td><td><%= current.Factor %></td></tr>
+                <tr><td>Current</td><td><%= current.Current %></td></tr>
+            </table>
+        </div>
+    </div>
+</body>
