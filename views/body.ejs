@@ -8,13 +8,13 @@
         <% } %></div>
         <div class="current-table">
             <table>
-                <tr><td>Time</td><td><%= current.Time %></td></tr>
-                <tr><td>Total</td><td><%= current.Total %></td></tr>
-                <tr><td>Power</td><td><%= current.Power %></td></tr>
-                <tr><td>ApparentPower</td><td><%= current.ApparentPower %></td></tr>
-                <tr><td>ReactivePower</td><td><%= current.ReactivePower %></td></tr>
-                <tr><td>Factor</td><td><%= current.Factor %></td></tr>
-                <tr><td>Current</td><td><%= current.Current %></td></tr>
+                <tr><td>Time</td><td colspan="2"><%= current.Time %></td></tr>
+                <tr><td>Active Power</td><td><%= current.Power %></td><td>W</td></tr>
+                <tr><td>Current</td><td><%= current.Current %></td><td>A</td></tr>
+                <tr><td>Apparent Power</td><td><%= current.ApparentPower %></td><td>VA</td></tr>
+                <tr><td>Reactive Power</td><td><%= current.ReactivePower %></td><td>VAr</td></tr>
+                <tr><td>Power Factor</td><td><%= current.Factor %></td><td></td></tr>
+                <tr><td>Energy Total</td><td><%= current.Total %></td><td>kWh</td></tr>
             </table>
         </div>
     </div>
