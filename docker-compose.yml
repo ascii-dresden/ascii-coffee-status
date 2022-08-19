@@ -5,7 +5,13 @@ services:
       context: .
       dockerfile: docker/build.Dockerfile
     container_name: "ascii-coffee-status"
+    networks:
+      - proxy
+    restart: always
     volumes:
       - ./logs:/usr/src/app/logs
     ports:
       - "3000:3000"
+networks:
+  proxy:
+    external: true
