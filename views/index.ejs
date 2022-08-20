@@ -4,71 +4,93 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>ascii coffee status</title>
-    <style>
-html {
-    font-family: Arial, Helvetica, sans-serif;
-    color: white;
-}
-.body, body, html {
-    margin: 0;
-    padding: 0;
-    min-height: 100vh;
-}
-.body {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-.body.true {
-    background: #27ae60;
-}
-.body.false {
-    background: #c0392b;
-}
-* {
-    box-sizing: content-box;
-}
-.container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 20rem;
-    padding: 0.5rem;
-}
-.status-icon {
-    font-size: 10rem;
-}
-.status-text {
-    font-size: 1.5rem;
-    padding: 0.5rem 0 2rem;
-}
-.current-table {
-    width: 100%;
-}
-.current-table table {
-    width: 100%;
-}
-
-@media screen and (max-width: 20rem) {
-    .container {
-        width: 100%;
-    }
-}
-    </style>
-    <script>
-         window.addEventListener('load', () => {
-            setInterval(async () => {
-                let req = await fetch("/body");
-                let text = await req.text();
-
-                document.body.innerHTML = text;
-            }, 1000);
-         });
-    </script>
+    <link rel="stylesheet" href="/static/main.css" />
+    <script src="/static/main.js" async></script>
 </head>
 
 <body>
-<%- include('./body'); %>
+<div id="body" class="<%= Status.Classification %>">
+    <div class="container">
+        <div class="status-icon" id="status-Icon"><%= Status.Icon %></div>
+        <div class="status-message" id="status-Message"><%= Status.Message %></div>
+        <div class="data-frame">
+            <table>
+                <tr>
+                    <td>Received</td>
+                    <td colspan="2" id="td-Received">
+                        <%= DataFrame.Received %>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Time</td>
+                    <td colspan="2" id="td-Time">
+                        <%= DataFrame.Time %>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Active Power</td>
+                    <td id="td-Power">
+                        <%= DataFrame.Power %>
+                    </td>
+                    <td>W</td>
+                </tr>
+                <tr>
+                    <td>Current</td>
+                    <td id="td-Current">
+                        <%= DataFrame.Current %>
+                    </td>
+                    <td>A</td>
+                </tr>
+                <tr>
+                    <td>Voltage</td>
+                    <td id="td-Voltage">
+                        <%= DataFrame.Voltage %>
+                    </td>
+                    <td>V</td>
+                </tr>
+                <tr>
+                    <td>Apparent Power</td>
+                    <td id="td-ApparentPower">
+                        <%= DataFrame.ApparentPower %>
+                    </td>
+                    <td>VA</td>
+                </tr>
+                <tr>
+                    <td>Reactive Power</td>
+                    <td id="td-ReactivePower">
+                        <%= DataFrame.ReactivePower %>
+                    </td>
+                    <td>VAr</td>
+                </tr>
+                <tr>
+                    <td>Power Factor</td>
+                    <td id="td-Factor">
+                        <%= DataFrame.Factor %>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>Energy Total</td>
+                    <td id="td-Total">
+                        <%= DataFrame.Total %>
+                    </td>
+                    <td>kWh</td>
+                </tr>
+            </table>
+        </div>
+        <div class="links">
+            <span>API Routes</span>
+            <table>
+            <tr><td>Current Status</td><td><a href="/api/status">/api/status</a></td></tr>
+            <tr><td>Current DataFrame</td><td><a href="/api/dataframe">/api/dataframe</a></td></tr>
+            <tr><td>Status Stream </td><td><a href="/api/stream/status">/api/stream/status</a></td></tr>
+            <tr><td>DataFrame Stream</td><td><a href="/api/stream/dataframe">/api/stream/dataframe</a></td></tr>
+            <tr><td>Logs</td><td><a href="/logs">/logs</a></td></tr>
+            </table>
+        </div>
+    </div>
+    </body>
+
 </body>
 
 </html>
