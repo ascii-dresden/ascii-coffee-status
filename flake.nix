@@ -17,14 +17,13 @@
           inherit system;
           overlays = [
             self.overlay
-            napalm.overlay
           ];
         });
 
     in
     {
       overlay = final: prev: {
-        ascii-coffee-status = final.napalm.buildPackage ./. {
+        ascii-coffee-status = (napalm.overlay final prev).napalm.buildPackage ./. {
           customPatchPackages = {
             "husky" = pkgs: prev: {};
             "typescript" = pkgs: prev: {};
