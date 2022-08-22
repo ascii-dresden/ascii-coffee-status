@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import EventEmitter from "events";
 import express from "express";
 import fs from "fs";

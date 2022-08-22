@@ -11,6 +11,9 @@
     "test": "ts-node src/test.ts",
     "lint": "npx eslint \"src/*.ts\""
   },
+  "bin": {
+    "ascii-coffee-status": "./dist/index.js"
+  },
   "keywords": [],
   "author": "pixix4",
   "license": "MIT",
