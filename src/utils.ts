@@ -70,7 +70,7 @@ function matchAll(
     }
   }
 
-  if (falseCount <= 2) {
+  if (falseCount <= currentStatus.length / 3) {
     return true;
   }
 
@@ -82,6 +82,9 @@ export function classify(
   currentStatus: DataFrame[]
 ): Classification {
   if (currentStatus.length <= 0) return "unknown";
+
+  let power = currentStatus[currentStatus.length - 1]?.Power;
+  if (!isNumber(power)) return lastClassification;
 
   switch (lastClassification) {
     case "startup":
@@ -110,6 +113,8 @@ export function classify(
         return "startup";
       }
       break;
+    case "unknown":
+      return power < 18 ? "off" : "on";
   }
 
   return matchAll(currentStatus, 0, 17) ? "off" : "on";

@@ -1,11 +1,19 @@
 function setupStatusSource() {
+  let ignoreFirst = true;
   const eventSource = new EventSource("/api/stream/status");
   eventSource.onmessage = (message) => {
     let status = JSON.parse(message.data);
+    if (!status) return;
 
     document.getElementById("body").className = status.Classification;
     document.getElementById("status-Icon").innerText = status.Icon;
     document.getElementById("status-Message").innerText = status.Message;
+
+    if (ignoreFirst) {
+      ignoreFirst = false;
+    } else {
+      notifyMe(status.Message);
+    }
   };
 
   eventSource.onerror = () => {
@@ -21,6 +29,7 @@ function setupDataFrameSource() {
   const eventSource = new EventSource("/api/stream/dataframe");
   eventSource.onmessage = (message) => {
     let frame = JSON.parse(message.data);
+    if (!frame) return;
 
     document.getElementById("td-Received").innerText = frame.Received;
     document.getElementById("td-Time").innerText = frame.Time;
@@ -46,3 +55,23 @@ window.addEventListener("load", () => {
   setupStatusSource();
   setupDataFrameSource();
 });
+
+function notifyMe(message) {
+  if (!("Notification" in window)) {
+    console.error("This browser does not support desktop notification");
+  } else if (Notification.permission === "granted") {
+    buildNotification(message);
+  } else if (Notification.permission !== "denied") {
+    Notification.requestPermission().then((permission) => {
+      if (permission === "granted") {
+        buildNotification(message);
+      }
+    });
+  }
+}
+
+function buildNotification(message) {
+  new Notification("ascii coffee machine", {
+    body: message,
+  });
+}

@@ -9,6 +9,7 @@ export function test_classification() {
     let filename = "logs/" + log;
     console.log(filename);
     test_classification_for_file(filename);
+    console.log();
   }
 }
 

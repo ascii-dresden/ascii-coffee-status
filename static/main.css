@@ -62,6 +62,10 @@ html {
   width: 100%;
 }
 
+.enable-notifications {
+  padding: 1rem 0 0;
+}
+
 .links {
   margin-top: 1rem;
 }
