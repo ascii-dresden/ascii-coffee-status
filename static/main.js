@@ -13,7 +13,7 @@ function setupStatusSource() {
 
     setTimeout(() => {
       setupStatusSource();
-    }, 3000);
+    }, 1000);
   };
 }
 
@@ -38,7 +38,7 @@ function setupDataFrameSource() {
 
     setTimeout(() => {
       setupDataFrameSource();
-    }, 3000);
+    }, 1000);
   };
 }
 

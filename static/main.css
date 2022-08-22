@@ -1,3 +1,7 @@
+* {
+  box-sizing: content-box;
+}
+
 html {
   font-family: Arial, Helvetica, sans-serif;
   color: white;
@@ -21,17 +25,17 @@ html {
 #body.on {
   background: #27ae60;
 }
-
 #body.off {
   background: #c0392b;
 }
-
+#body.startup {
+  background: #1abc9c;
+}
+#body.shutdown {
+  background: #d35400;
+}
 #body.unknown {
   background: #2c3e50;
-}
-
-* {
-  box-sizing: content-box;
 }
 
 .container {
@@ -54,7 +58,6 @@ html {
 .data-frame {
   width: 100%;
 }
-
 .data-frame table {
   width: 100%;
 }

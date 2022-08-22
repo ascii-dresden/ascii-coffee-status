@@ -4,15 +4,15 @@ import fs from "fs";
 import {
   StatusFrame,
   classify,
-  createClassificationFrame as createStatusFrame,
+  createStatusFrame,
   DataFrame,
   runSSE,
 } from "./utils";
 var serveIndex = require("serve-index");
 
-const BUFFER_LENGTH = 5;
+const BUFFER_LENGTH = 6;
 let GlobalDataFrameBuffer: DataFrame[] = [];
-let GlobalStatus: StatusFrame = createStatusFrame("unknown");
+let GlobalStatus: StatusFrame = createStatusFrame("unknown", "");
 
 const GlobalEmitter = new EventEmitter();
 
@@ -108,12 +108,20 @@ GlobalEmitter.addListener("OnDataFrame", (frame) => {
     );
   }
 
-  let classification = classify(GlobalDataFrameBuffer);
+  let classification = classify(
+    GlobalStatus.Classification,
+    GlobalDataFrameBuffer
+  );
 
   if (classification !== GlobalStatus.Classification) {
-    GlobalStatus = createStatusFrame(classification);
+    GlobalStatus = createStatusFrame(
+      classification,
+      GlobalDataFrameBuffer[GlobalDataFrameBuffer.length - 1].Time
+    );
 
     GlobalEmitter.emit("OnStatus", GlobalStatus);
     GlobalEmitter.emit("OnStatusString", JSON.stringify(GlobalStatus));
   }
 });
+
+// test_classification();

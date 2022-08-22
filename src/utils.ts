@@ -12,12 +12,13 @@ export interface DataFrame {
   Current: number | null;
 }
 
-export type Classification = "unknown" | "off" | "on";
+export type Classification = "unknown" | "off" | "on" | "startup" | "shutdown";
 
 export interface StatusFrame {
   Classification: Classification;
   Icon: string;
   Message: string;
+  Time: string;
 }
 
 export function runSSE(
@@ -50,35 +51,93 @@ export function runSSE(
   });
 }
 
-export function classify(currentStatus: DataFrame[]): Classification {
-  let sum = 0;
-  let count = 0;
+function matchAll(
+  currentStatus: DataFrame[],
+  min: number,
+  max: number
+): boolean {
+  let all = true;
+  let falseCount = 0;
 
   for (let row of currentStatus) {
     let power = row?.Power;
 
-    if (isNumber(power)) sum += power;
-    count += 1;
+    if (isNumber(power)) {
+      if (!(min <= power && power <= max)) {
+        all = false;
+        falseCount += 1;
+      }
+    }
   }
 
-  if (count <= 0) return "unknown";
-  return sum / count >= 18 ? "on" : "off";
+  if (falseCount <= 2) {
+    return true;
+  }
+
+  return all;
+}
+
+export function classify(
+  lastClassification: Classification,
+  currentStatus: DataFrame[]
+): Classification {
+  if (currentStatus.length <= 0) return "unknown";
+
+  switch (lastClassification) {
+    case "startup":
+      if (matchAll(currentStatus, 35, 5000)) {
+        return "startup";
+      }
+      break;
+    case "on":
+      if (matchAll(currentStatus, 35, 50)) {
+        return "shutdown";
+      }
+      break;
+    case "shutdown":
+      if (matchAll(currentStatus, 22, 5000)) {
+        return "shutdown";
+      }
+      if (
+        isNumber(currentStatus[currentStatus.length - 1].Power) &&
+        currentStatus[currentStatus.length - 1].Power < 18
+      ) {
+        return "off";
+      }
+      break;
+    case "off":
+      if (!matchAll(currentStatus, 0, 17)) {
+        return "startup";
+      }
+      break;
+  }
+
+  return matchAll(currentStatus, 0, 17) ? "off" : "on";
 }
 
 function isNumber(n: any): boolean {
   return typeof n === "number" && !isNaN(n - n);
 }
 
-export function createClassificationFrame(
-  classification: Classification
+export function createStatusFrame(
+  classification: Classification,
+  time: string
 ): StatusFrame {
   let icon = "";
   let message = "";
 
   switch (classification) {
+    case "startup":
+      icon = "😄";
+      message = "Yay, die Maschine wird angeschaltet!";
+      break;
     case "on":
       icon = "😄";
       message = "Yay, die Maschine ist an!";
+      break;
+    case "shutdown":
+      icon = "😕";
+      message = "Ohh, die Maschine wird ausgeschaltet!";
       break;
     case "off":
       icon = "😕";
@@ -94,5 +153,6 @@ export function createClassificationFrame(
     Classification: classification,
     Icon: icon,
     Message: message,
+    Time: time,
   };
 }
