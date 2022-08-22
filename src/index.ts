@@ -86,9 +86,9 @@ app.use("/logs", express.static("./logs"), serveIndex("./logs"));
 
 app.use("/", express.static("./static"));
 
-let port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log(`The application is listening on port ${port}!`);
+let addr = process.env.LISTEN || 3000;
+app.listen(addr, () => {
+  console.log(`The application is listening on ${addr}!`);
 });
 
 GlobalEmitter.addListener("OnDataFrameString", (frameString) => {
