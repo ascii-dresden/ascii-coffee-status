@@ -86,7 +86,7 @@ app.use("/logs", express.static("./logs"), serveIndex("./logs"));
 
 app.use("/", express.static("./static"));
 
-app.listen(3000, () => {
+app.listen(process.env.PORT || 3000, () => {
   console.log("The application is listening on port 3000!");
 });
 
