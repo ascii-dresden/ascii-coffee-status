@@ -1,7 +1,6 @@
 import EventEmitter from "events";
 import express from "express";
 import fs from "fs";
-// import { test_classification } from "./test";
 import {
   StatusFrame,
   classify,
@@ -111,6 +110,7 @@ GlobalEmitter.addListener("OnDataFrame", (frame) => {
 
   let classification = classify(
     GlobalStatus.Classification,
+    frame,
     GlobalDataFrameBuffer
   );
 
@@ -124,5 +124,3 @@ GlobalEmitter.addListener("OnDataFrame", (frame) => {
     GlobalEmitter.emit("OnStatusString", JSON.stringify(GlobalStatus));
   }
 });
-
-// test_classification();

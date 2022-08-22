@@ -51,15 +51,11 @@ export function runSSE(
   });
 }
 
-function matchAll(
-  currentStatus: DataFrame[],
-  min: number,
-  max: number
-): boolean {
+function matchMost(window: DataFrame[], min: number, max: number): boolean {
   let all = true;
   let falseCount = 0;
 
-  for (let row of currentStatus) {
+  for (let row of window) {
     let power = row?.Power;
 
     if (isNumber(power)) {
@@ -70,7 +66,7 @@ function matchAll(
     }
   }
 
-  if (falseCount <= currentStatus.length / 3) {
+  if (falseCount <= window.length / 3) {
     return true;
   }
 
@@ -79,37 +75,36 @@ function matchAll(
 
 export function classify(
   lastClassification: Classification,
-  currentStatus: DataFrame[]
+  currentFrame: DataFrame,
+  window: DataFrame[]
 ): Classification {
-  if (currentStatus.length <= 0) return "unknown";
-
-  let power = currentStatus[currentStatus.length - 1]?.Power;
+  let power = currentFrame.Power;
   if (!isNumber(power)) return lastClassification;
 
   switch (lastClassification) {
     case "startup":
-      if (matchAll(currentStatus, 35, 5000)) {
+      if (matchMost(window, 35, 5000)) {
         return "startup";
       }
       break;
     case "on":
-      if (matchAll(currentStatus, 35, 50)) {
+      if (matchMost(window, 35, 50)) {
         return "shutdown";
       }
       break;
     case "shutdown":
-      if (matchAll(currentStatus, 22, 5000)) {
+      if (matchMost(window, 22, 5000)) {
         return "shutdown";
       }
       if (
-        isNumber(currentStatus[currentStatus.length - 1].Power) &&
-        currentStatus[currentStatus.length - 1].Power < 18
+        isNumber(window[window.length - 1].Power) &&
+        window[window.length - 1].Power < 18
       ) {
         return "off";
       }
       break;
     case "off":
-      if (!matchAll(currentStatus, 0, 17)) {
+      if (!matchMost(window, 0, 17)) {
         return "startup";
       }
       break;
@@ -117,7 +112,7 @@ export function classify(
       return power < 18 ? "off" : "on";
   }
 
-  return matchAll(currentStatus, 0, 17) ? "off" : "on";
+  return matchMost(window, 0, 17) ? "off" : "on";
 }
 
 function isNumber(n: any): boolean {

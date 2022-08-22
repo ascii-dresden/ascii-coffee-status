@@ -35,7 +35,7 @@ export function test_classification_for_file(filename: string) {
       dataFrameBuffer.splice(0, dataFrameBuffer.length - BUFFER_LENGTH);
     }
 
-    let classification = classify(latestClassification, dataFrameBuffer);
+    let classification = classify(latestClassification, frame, dataFrameBuffer);
 
     if (classification !== latestClassification) {
       latestClassification = classification;
@@ -43,3 +43,5 @@ export function test_classification_for_file(filename: string) {
     }
   }
 }
+
+test_classification();
