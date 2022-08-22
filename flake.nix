@@ -26,12 +26,9 @@
       overlay = final: prev: {
         ascii-coffee-status = final.napalm.buildPackage ./. {
           customPatchPackages = {
-            "husky" = pkgs: prev: {
-            };
+            "husky" = pkgs: prev: {};
+            "typescript" = pkgs: prev: {};
           };
-          postBuild = ''
-            npm run build
-          '';
         };
       };
 
