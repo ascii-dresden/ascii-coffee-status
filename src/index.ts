@@ -82,9 +82,9 @@ app.get("/", (_, res) => {
   });
 });
 
-app.use("/static", express.static("./static"));
-
 app.use("/logs", express.static("./logs"), serveIndex("./logs"));
+
+app.use("/", express.static("./static"));
 
 app.listen(3000, () => {
   console.log("The application is listening on port 3000!");

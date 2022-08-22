@@ -63,7 +63,14 @@ html {
 }
 
 .enable-notifications {
-  padding: 1rem 0 0;
+  margin-top: 0.6rem;
+  padding: 0.6rem 1rem;
+  border-radius: 0.2rem;
+  cursor: pointer;
+  user-select: none;
+}
+.enable-notifications:hover {
+  background-color: rgba(255, 255, 255, 0.2);
 }
 
 .links {
