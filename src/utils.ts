@@ -106,6 +106,7 @@ export function classify(
       break;
     case "off":
       if (!matchMost(window, 0, 17)) {
+        window.splice(0, window.length - 1);
         return "startup";
       }
       break;
