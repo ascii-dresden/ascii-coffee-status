@@ -16,6 +16,7 @@ export type Classification = "unknown" | "off" | "on" | "startup" | "shutdown";
 
 export interface StatusFrame {
   Classification: Classification;
+  ClassificationTimestamp: number;
   Icon: string;
   Message: string;
   Time: string;
@@ -76,45 +77,59 @@ function matchMost(window: DataFrame[], min: number, max: number): boolean {
 
 export function classify(
   lastClassification: Classification,
+  lastClassificationTimestamp: number,
   currentFrame: DataFrame,
   window: DataFrame[]
-): Classification {
+): [Classification, number] {
+  const SHUTDOWN_OFFSET = 15 * 60 * 1000;
+  let currentTimestamp = new Date(currentFrame.Time).getTime();
+
   let power = currentFrame.Power;
-  if (!isNumber(power)) return lastClassification;
+  if (!isNumber(power))
+    return [lastClassification, lastClassificationTimestamp];
 
   switch (lastClassification) {
     case "startup":
       if (matchMost(window, 35, 5000)) {
-        return "startup";
+        return ["startup", lastClassificationTimestamp];
       }
       break;
     case "on":
       if (matchMost(window, 35, 50)) {
-        return "shutdown";
+        return ["shutdown", currentTimestamp];
       }
       break;
     case "shutdown":
-      if (matchMost(window, 22, 5000)) {
-        return "shutdown";
+      if (
+        matchMost(window, 22, 5000) ||
+        currentTimestamp < lastClassificationTimestamp + SHUTDOWN_OFFSET
+      ) {
+        return ["shutdown", lastClassificationTimestamp];
       }
       if (
         isNumber(window[window.length - 1].Power) &&
         window[window.length - 1].Power < 18
       ) {
-        return "off";
+        return ["off", currentTimestamp];
       }
       break;
     case "off":
       if (!matchMost(window, 0, 17)) {
         window.splice(0, window.length - 1);
-        return "startup";
+        return ["startup", currentTimestamp];
       }
       break;
     case "unknown":
-      return power < 18 ? "off" : "on";
+      return power < 18 ? ["off", currentTimestamp] : ["on", currentTimestamp];
   }
 
-  return matchMost(window, 0, 17) ? "off" : "on";
+  let result: Classification = matchMost(window, 0, 17) ? "off" : "on";
+  return [
+    result,
+    result === lastClassification
+      ? lastClassificationTimestamp
+      : currentTimestamp,
+  ];
 }
 
 function isNumber(n: any): boolean {
@@ -123,6 +138,7 @@ function isNumber(n: any): boolean {
 
 export function createStatusFrame(
   classification: Classification,
+  classificationTimestamp: number,
   time: string
 ): StatusFrame {
   let icon = "";
@@ -156,5 +172,6 @@ export function createStatusFrame(
     Icon: icon,
     Message: message,
     Time: time,
+    ClassificationTimestamp: classificationTimestamp,
   };
 }

@@ -23,6 +23,7 @@ export function test_classification_for_file(filename: string) {
   const BUFFER_LENGTH = 6;
   let dataFrameBuffer: DataFrame[] = [];
   let latestClassification: Classification = "unknown";
+  let lastClassificationTimestamp = 0;
 
   // print all lines
   for (let l of lines) {
@@ -35,10 +36,16 @@ export function test_classification_for_file(filename: string) {
       dataFrameBuffer.splice(0, dataFrameBuffer.length - BUFFER_LENGTH);
     }
 
-    let classification = classify(latestClassification, frame, dataFrameBuffer);
+    let [classification, timestamp] = classify(
+      latestClassification,
+      lastClassificationTimestamp,
+      frame,
+      dataFrameBuffer
+    );
 
     if (classification !== latestClassification) {
       latestClassification = classification;
+      lastClassificationTimestamp = timestamp;
       console.log(`  ${frame.Time} - ${classification}`);
     }
   }

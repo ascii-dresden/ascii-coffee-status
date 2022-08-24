@@ -13,7 +13,7 @@ var serveIndex = require("serve-index");
 
 const BUFFER_LENGTH = 6;
 let GlobalDataFrameBuffer: DataFrame[] = [];
-let GlobalStatus: StatusFrame = createStatusFrame("unknown", "");
+let GlobalStatus: StatusFrame = createStatusFrame("unknown", 0, "");
 
 const GlobalEmitter = new EventEmitter();
 
@@ -110,8 +110,9 @@ GlobalEmitter.addListener("OnDataFrame", (frame) => {
     );
   }
 
-  let classification = classify(
+  let [classification, classificationTimestamp] = classify(
     GlobalStatus.Classification,
+    GlobalStatus.ClassificationTimestamp,
     frame,
     GlobalDataFrameBuffer
   );
@@ -119,6 +120,7 @@ GlobalEmitter.addListener("OnDataFrame", (frame) => {
   if (classification !== GlobalStatus.Classification) {
     GlobalStatus = createStatusFrame(
       classification,
+      classificationTimestamp,
       GlobalDataFrameBuffer[GlobalDataFrameBuffer.length - 1].Time
     );
 
