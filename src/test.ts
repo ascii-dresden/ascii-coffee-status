@@ -20,7 +20,7 @@ export function test_classification_for_file(filename: string) {
   // split the contents by new line
   const lines = data.split(/\r?\n/);
 
-  const BUFFER_LENGTH = 6;
+  const BUFFER_LENGTH = 18;
   let dataFrameBuffer: DataFrame[] = [];
   let latestClassification: Classification = "unknown";
   let lastClassificationTimestamp = 0;

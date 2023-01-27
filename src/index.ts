@@ -11,7 +11,7 @@ import {
 } from "./utils";
 var serveIndex = require("serve-index");
 
-const BUFFER_LENGTH = 6;
+const BUFFER_LENGTH = 18;
 let GlobalDataFrameBuffer: DataFrame[] = [];
 let GlobalStatus: StatusFrame = createStatusFrame("unknown", 0, "");
 
