@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import cors from "cors";
 import EventEmitter from "events";
 import express from "express";
 import fs from "fs";
@@ -18,6 +19,7 @@ let GlobalStatus: StatusFrame = createStatusFrame("unknown", 0, "");
 const GlobalEmitter = new EventEmitter();
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 app.set("view engine", "ejs");
 
