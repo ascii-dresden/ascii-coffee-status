@@ -2,6 +2,7 @@
   description = "Ascii Coffee Status Server";
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
   inputs.napalm.url = "github:nix-community/napalm";
+  inputs.napalm.inputs.nixpkgs.follows = "nixpkgs";
 
   outputs = { self, nixpkgs, napalm }:
     let
@@ -23,7 +24,7 @@
     in
     {
       overlay = final: prev: {
-        ascii-coffee-status = (napalm.overlay final prev).napalm.buildPackage ./. {
+        ascii-coffee-status = (napalm.overlays.default final prev).napalm.buildPackage ./. {
           customPatchPackages = {
             "husky" = pkgs: prev: {};
             "typescript" = pkgs: prev: {};
