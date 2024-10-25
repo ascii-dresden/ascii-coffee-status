@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <meta charset="UTF-8" />
+    <title>ascii coffee status</title>
+    <link rel="stylesheet" href="/static/main.css" />
+</head>
+
+<body>
+<div id="body" class="unknown">
+    <div class="container">
+        <div class="status-icon" id="status-Icon">😮</div>
+	<div class="status-message" style="width: 35rem; text-align: center" id="status-Message">Ohh, wir haben eine neue Kaffeemaschine! <br>Leider funktioniert dieser Dienst damit noch nicht :(</div>
+        <div class="links">
+            <span>API Routes</span>
+            <table>
+            <tr><td>Current Status</td><td><a href="/api/status">/api/status</a></td></tr>
+            <tr><td>Current DataFrame</td><td><a href="/api/dataframe">/api/dataframe</a></td></tr>
+            <tr><td>Status Stream </td><td><a href="/api/stream/status">/api/stream/status</a></td></tr>
+            <tr><td>DataFrame Stream</td><td><a href="/api/stream/dataframe">/api/stream/dataframe</a></td></tr>
+            <tr><td>Logs</td><td><a href="/logs">/logs</a></td></tr>
+            </table>
+        </div>
+    </div>
+</div>
+</body>
+
+</html>
